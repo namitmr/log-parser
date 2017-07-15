@@ -1,0 +1,9 @@
+{
+  "name": "sms-log",
+  "protocol": "http",
+  "mongo-url": "mongodb://localhost:27017/sms-log",
+  "port": 2406,
+  "logsPath": "./logs",
+  "upload-dir":"./uploads/",
+  "host":"http://c579622a.ngrok.io"
+}

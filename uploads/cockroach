@@ -1,0 +1,41 @@
+lc-10 | expId-2-lc-10 |       18
+
+
+lc-10:expId-2-lc-10:email_*:scoped
+
+
+
+
+
+
+lc-10:expId-2-lc-10:email_delivered:2017/04/21:scoped
+lc-10:expId-2-lc-10:email_open:2017/04/25:scoped
+lc-10:expId-2-lc-10:email_open:2017/04/27:scoped
+lc-10:expId-2-lc-10:email_open:2017/04/23:scoped
+lc-10:expId-2-lc-10:email_delivered:2017/04/23:scoped
+
+
+
+
+
+
+
+lc-10:expId-2-lc-10:email_delivered:2017/04/21:scoped lc-10:expId-2-lc-10:email_open:2017/04/25:scoped lc-10:expId-2-lc-10:email_open:2017/04/27:scoped lc-10:expId-2-lc-10:email_open:2017/04/23:scoped lc-10:expId-2-lc-10:email_delivered:2017/04/23:scoped
+
+
+
+bitop or destkey1 lc-10:expId-2-lc-10:email_delivered:2017/04/21:scoped lc-10:expId-2-lc-10:email_open:2017/04/25:scoped lc-10:expId-2-lc-10:email_open:2017/04/27:scoped lc-10:expId-2-lc-10:email_open:2017/04/23:scoped lc-10:expId-2-lc-10:email_delivered:2017/04/23:scoped
+
+
+
+bitop or destkey1 "lc-10:expId-3-lc-10:email_delivered:2017/04/29:scoped" "lc-10:expId-3-lc-10:email_click:2017/05/11:scoped" "lc-10:expId-3-lc-10:email_click:2017/05/10:scoped" "lc-10:expId-3-lc-10:email_open:2017/05/03:scoped" "lc-10:expId-3-lc-10:email_delivered:2017/05/03:scoped" "lc-10:expId-3-lc-10:email_delivered:2017/05/01:scoped" "lc-10:expId-3-lc-10:email_click:2017/05/04:scoped" "lc-10:expId-3-lc-10:email_open:2017/05/06:scoped" "lc-10:expId-3-lc-10:email_open:2017/05/10:scoped" "lc-10:expId-3-lc-10:email_delivered:2017/04/26:scoped" "lc-10:expId-3-lc-10:email_open:2017/05/05:scoped" "lc-10:expId-3-lc-10:email_open:2017/05/07:scoped" "lc-10:expId-3-lc-10:email_delivered:2017/04/28:scoped" "lc-10:expId-3-lc-10:email_delivered:2017/04/24:scoped" "lc-10:expId-3-lc-10:email_click:2017/05/09:scoped" "lc-10:expId-3-lc-10:email_click:2017/05/16:scoped" "lc-10:expId-3-lc-10:email_open:2017/04/24:scoped"
+
+
+CREATE TABLE Scopes (␤                                                           |
+|                   |     lc STRING(20) NOT NULL,␤                                                     |
+|                   |     experiment_id STRING(512) NOT NULL,␤                                         |
+|                   |     scope_id STRING(512) NOT NULL,␤                                              |
+|                   |     bitIndex INT NULL,␤                                                          |
+|                   |     CONSTRAINT "primary" PRIMARY KEY (lc ASC, experiment_id ASC, scope_id ASC),␤ |
+|                   |     FAMILY "primary" (lc, experiment_id, scope_id, bitIndex)␤                    |
+|                   | )     
