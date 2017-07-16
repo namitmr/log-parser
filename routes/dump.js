@@ -35,7 +35,7 @@ router.post('/dump', function(req, res, next) {
     if (err){
       return res.status(500).send(err);
     } else {
-    	readLastLines.read(location, 1).then((lines) => dumpMongo(location,parseInt(lines.split(":")[3].trim())));
+    	readLastLines.read(location, 1).then((lines) => dumpMongo(location, parseInt(lines.split(":")[3].trim())));
     	res.send('SUCCESS');
 	}
   });
@@ -48,19 +48,19 @@ dumpMongo = function (dir, num) {
 	const rl = lineReader.createInterface({
 	  input: fs.createReadStream(dir)
 	});
-	var lines, arr;
+	var lines = [], arr = [];
 	var count = 0,index = 0;
 	var ended = false;
 	rl.on('line', function (line) {	
 		  console.log('Line from file:', line);
-		  		lines[index++] = line;
 		  		console.log("lines",lines);
-		  		if(count != 1 && count < num && (count % 10 == 0)){
-		  			bulkInsertMongo(lines);
+		  		if(count != 0 && count <= num){
+		  			// lines[index++] = line;
+		  				bulkInsertMongo(line);
 		  		}
-		  		if(count == num){
-		  			bulkInsertMongo(lines);	
-		  		}
+		  		// if(count == num && lines.length > 0){
+		  		// 	bulkInsertMongo(lines);	
+		  		// }
 
 		  	count++;
 	});
@@ -73,30 +73,37 @@ bulkInsertMongo = function(lines){
 	console.log("here");
 	var mongoArray = [];
 	var mongoObj = {"insertOne" : {}};
-		for(i = 0 ; i< lines.size(); i++){
-		 	arr = lines[i].split("||")[1].split("~|~");
+	console.log("*******",lines);
+		// for(i = 0 ; i< lines.length; i++){
+		 	arr = lines.split("||")[1].split("~|~");
 		 	if(arr.length == columns.length){
 			 	for(j = 0; j< columns.length; j++ ){
 			 		obj[columns[j]] = arr[j];
 			 	}
 			 }
-			console.log("OBJ:",obj);
 		 	mongoObj["insertOne"] = obj;
-		 	console.log("mongoonj:",mongoObj);
-		 	mongoArray[i] = mongoObj;
-		 	console.log("mongoarr:",mongoArray);
-		 }
-	MongoClient.connect(global.mongoUrl, function(err, db) {
-	  if(err) { 
-	  	return console.dir(err); 
-	  }
-	  console.log("@#$%^&*",mongoArray);
-	  var res = db.collection('logResults').bulkWrite(mongoArray);
-	  console.log(res);
-	});
-
+		 	mongoArray[0] = mongoObj;
+		 	mongoJob(mongoArray);
+		 // }
 }	
 
+mongoJob = function (mongoArray) {
+	var currentdate = new Date(); 
+	var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+	MongoClient.connect(global.mongoUrl, function(err, db) {
+	  if(err) { 
+	  	console.log(err); 
+	  }
+	  var res = db.collection('logResults').bulkWrite(mongoArray);
+	  console.log(res+" | "+datetime);
+	});
+}
 
 
 
